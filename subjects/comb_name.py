@@ -13,3 +13,6 @@ class CombType(str, enum.Enum):
     ACE_KING = 'ACE_KING'
     HIGH_CARD = 'HIGH_CARD'
     
+if __name__ == "__main__":
+    print(CombType('ROYAL_FLUSH'))
+    
