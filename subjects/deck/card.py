@@ -41,12 +41,13 @@ class Suit(StrEnum):
     DIAMONDS = 'd',
     SPADES = 's',
 
-def suit_to_int(suit:Suit)->int:
-    match suit:
-        case  Suit.HEARTS: return 0   
-        case  Suit.CLUBS: return 1   
-        case  Suit.DIAMONDS: return 2   
-        case  Suit.SPADES: return 3   
+class SuitTools():
+    def suit_to_ind(suit:Suit)->int:
+        match suit:
+            case  Suit.HEARTS: return 0   
+            case  Suit.CLUBS: return 1   
+            case  Suit.DIAMONDS: return 2   
+            case  Suit.SPADES: return 3   
         
 
 class Card(BaseModel):
@@ -84,6 +85,13 @@ class Deck(BaseModel):
         for curr_card in self.cards_set:
             rank_amount[RankTools.rank_to_ind(curr_card.rank)] +=1
         return rank_amount
+    
+    @computed_field 
+    def suits_0_1(self)-> list[list[int]]:
+        suit_0_1 = [[0 for _ in range(13)] for _ in range(4)]
+        for curr_card in self.cards_set:
+            suit_0_1[SuitTools.suit_to_ind(curr_card.suit)][RankTools.rank_to_ind(curr_card.rank)] =1
+        return suit_0_1
          
     def remove_cards(self, card_list:list[Card]):
         self.cards_set -= set(card_list)
@@ -121,6 +129,6 @@ if __name__ == "__main__":
     print(full_deck.short_view)
     # full_deck.add_cards([card])        
     # print(full_deck.short_view)
-    print(full_deck.rank_amount[8])
+    print(full_deck.suits_0_1)
     
     

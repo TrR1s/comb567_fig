@@ -13,12 +13,21 @@ class CombRanks(BaseModel):
             rank_list.extend([int(rank) for _ in range(amount)])
         return ','.join(map(str, sorted(rank_list)))
 
-    def count_amount_in_deck(self,deck: Deck):
+    def count_amount_in_deck(self,deck: Deck) -> tuple[int,list[int]]:
         total_amount = 1
+        suit_am = [0,0,0,0]
         for curr_rank_str, amount in self.rank_dict.items():
             rank_ind = int(curr_rank_str)-2
             total_amount *= math.comb(deck.rank_amount[rank_ind],amount)
-        return total_amount
+        if max(self.rank_dict.values()) <= 1:
+            for curr_suit in range(4):
+                curr_suit_am = 1
+                for curr_rank_str in self.rank_dict.keys():
+                    rank_ind = int(curr_rank_str)-2
+                    curr_suit_am *= deck.suits_0_1[curr_suit][rank_ind]
+                suit_am[curr_suit] = curr_suit_am
+            
+        return total_amount, suit_am
 
 
 class CombRanksTool():
