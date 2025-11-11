@@ -32,8 +32,7 @@ class CombRanks(BaseModel):
 
 class CombRanksTool():
     
-    @classmethod   
-    def do_combrank_from_str_key(cls, str_key: str) -> CombRanks:
+    def do_combrank_from_str_key(str_key: str) -> CombRanks:
         str_key_split = str_key.split('_')
         ranks_str = str_key_split[0].split(',')
         ranks = np.array(ranks_str)
@@ -42,6 +41,7 @@ class CombRanksTool():
         return CombRanks(
             rank_dict = rank_dict,
         )
+        
     @classmethod    
     def do_combrank_from_str_rank_key(cls, str_rank_key: str) -> CombRanks:
         ranks_str = str_rank_key.split(',')
