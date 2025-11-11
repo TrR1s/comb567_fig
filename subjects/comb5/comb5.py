@@ -1,6 +1,6 @@
 from pydantic import BaseModel, computed_field,field_validator,Field
 from utils.read_json5 import read_json
-from subjects.deck.card import Card,Rank,Suit,rank_to_int
+from subjects.deck.card import Card,Rank,Suit,RankTools
 
 class Comb5Dict():
     comb5_dict = read_json()
@@ -23,7 +23,7 @@ class Comb5(BaseModel):
     
     @computed_field
     def str_key(self) -> str:
-        rank_list = [rank_to_int(card.rank)+2 for card in self.cards_set]
+        rank_list = [RankTools.rank_to_ind(card.rank)+2 for card in self.cards_set]
         flush = 'fl' if self.flush_is else 'unfl'
         return ','.join(map(str, sorted(rank_list))) + '_' + flush
     
