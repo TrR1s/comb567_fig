@@ -52,8 +52,7 @@ class CombRanksTool():
             rank_dict = rank_dict,
         )
     
-    @classmethod    
-    def small_combrank_in_big(cls, small_cr: CombRanks,big_small: CombRanks ) -> bool:
+    def small_combrank_in_big(small_cr: CombRanks,big_small: CombRanks ) -> bool:
         for small_r, small_am_r in small_cr.rank_dict.items():
             if small_r not in big_small.rank_dict:
                 return False
