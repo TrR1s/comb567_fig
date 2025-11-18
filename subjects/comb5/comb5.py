@@ -28,9 +28,11 @@ class Comb5(BaseModel):
         return ','.join(map(str, sorted(rank_list))) + '_' + flush
     
     @computed_field
-    def comb_fig(self) -> tuple[str,int]:
+    def comb_fig(self) -> dict[str,int]:
         name, nn = Comb5Dict.comb5_dict[self.str_key]
-        return (name, nn)
+        return {'name':name, 
+                'nn':nn
+                }
         
     
   

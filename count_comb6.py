@@ -1,16 +1,16 @@
 from itertools import combinations
-from subjects import CombType,Deck,do_full_deck,Comb5,Comb6
+from subjects import CombType,Deck,DeckTools,Comb5,Comb6
 import pandas as pd
 from core.config import CSV_FILES_PATH
 
 res_dict = dict((name.value,0) for name in CombType )
 print(res_dict)
-deck = do_full_deck()
+deck = DeckTools.do_full_deck()
 
 
 for curr_set_6 in combinations(deck.cards_set,6):
     best_comb5 = Comb6(curr_set_6).best_comb5()
-    comb_name = best_comb5.comb_fig[0]
+    comb_name = best_comb5.comb_fig['name']
     res_dict[comb_name] +=1
 print(res_dict)
 
