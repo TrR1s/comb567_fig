@@ -1,6 +1,8 @@
 from pydantic import BaseModel, computed_field,field_validator,Field
+import numpy as np
 from utils.read_json5 import read_json
 from subjects.deck.card import Card,Rank,Suit,RankTools
+from subjects.comb_name.comb_name import CombType
 
 class Comb5Dict():
     comb5_dict = read_json()
@@ -33,6 +35,16 @@ class Comb5(BaseModel):
         return {'name':name, 
                 'nn':nn
                 }
-        
     
-  
+    
+    @computed_field
+    def pair_rank(self)-> Rank|None:
+        if self.comb_fig['name'] != CombType.ONE_PAIR.value:
+            return None
+        rank_np = np.array([RankTools.rank_to_ind(card.rank) for card in self.cards_set],dtype= int )   
+        res, counts = np.unique(rank_np, return_counts=True)
+        for i, freq in enumerate(counts):
+            if freq == 2:
+                return RankTools.ind_to_rank(res[i]).value
+        
+        raise ValueError('didnt find pair in pair')

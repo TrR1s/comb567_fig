@@ -12,8 +12,8 @@ card2 = Card(
     rank=rank,
     suit=suit)
 
-rank = Rank.QUEEN
-suit = Suit.CLUBS
+rank = Rank.ACE
+suit = Suit.DIAMONDS
 card3 = Card(
     rank=rank,
     suit=suit)
@@ -35,4 +35,5 @@ comb5 = Comb5(cards_set=card_set)
 
 print(comb5.str_key)
 print(comb5.comb_fig)
+print(comb5.pair_rank)
 

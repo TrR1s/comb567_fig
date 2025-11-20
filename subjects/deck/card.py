@@ -33,7 +33,23 @@ class RankTools():
             case  Rank.JACK: return 9   
             case  Rank.QUEEN: return 10   
             case  Rank.KING: return 11   
-            case  Rank.ACE: return 12   
+            case  Rank.ACE: return 12  
+    
+    def ind_to_rank(rank:Rank)->int:
+        match rank:
+            case  0: return Rank._2   
+            case  1: return Rank._3   
+            case  2: return Rank._4   
+            case  3: return Rank._5   
+            case  4: return Rank._6   
+            case  5: return Rank._7   
+            case  6: return Rank._8   
+            case  7: return Rank._9   
+            case  8: return Rank._10   
+            case  9: return Rank.JACK   
+            case  10: return Rank.QUEEN   
+            case  11: return Rank.KING   
+            case  12: return Rank.ACE  
 
 class Suit(StrEnum):
     HEARTS = 'h',

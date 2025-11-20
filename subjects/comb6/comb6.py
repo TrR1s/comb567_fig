@@ -14,7 +14,7 @@ class Comb6():
             comb5_list.append(Comb5(cards_set=curr_comb5_set))
         best_ind =0
         for index, comb5 in enumerate(comb5_list):
-            if comb5_list[best_ind].comb_fig[1] < comb5.comb_fig[1]:
+            if comb5_list[best_ind].comb_fig['nn'] < comb5.comb_fig['nn']:
                 best_ind = index
         return comb5_list[best_ind]
 
