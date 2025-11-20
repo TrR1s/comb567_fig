@@ -201,13 +201,14 @@ def do_comb7_with_fl_list() -> list:
     comb7_with_fl_list =[]
     comb_7_list = do_comb_7_tuple_list()
     for curr_comb_7 in comb_7_list:
-        unigue_ranks, _ = np.unique(np.array(curr_comb_7), return_counts=True)
+        unique_ranks, _ = np.unique(np.array(curr_comb_7), return_counts=True)
         comb7_with_fl_list.append((curr_comb_7,[]))
-        unigue_ranks = map(int,unigue_ranks)
-        
-        for flushed_am in range(5,8):
-            for comb in combinations(unigue_ranks,flushed_am):
-                comb7_with_fl_list.append((curr_comb_7,list(sorted(comb))))
+        if len(unique_ranks) >=5:
+            unique_ranks = list(map(int,list(unique_ranks)))
+            
+            for flushed_am in range(5,8):
+                for comb in combinations(unique_ranks,flushed_am):
+                    comb7_with_fl_list.append((curr_comb_7,list(sorted(comb))))
     return comb7_with_fl_list
                 
 if __name__ == "__main__":

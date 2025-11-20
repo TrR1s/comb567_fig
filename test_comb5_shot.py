@@ -15,3 +15,4 @@ for curr_comb5 in comb5_list:
     total_amount += curr_comb5.count_amount_in_deck(deck)
     
 print(total_amount)
+print(comb5_list[0])

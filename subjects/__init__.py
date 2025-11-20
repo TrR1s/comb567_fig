@@ -7,3 +7,4 @@ from .comb_name.comb_aa_name import CombAAType
 from .comb_shorts import CombRanks,CombRanksTool
 from .comb5.comb5_short import Comb5short,Comb5shortTools
 from .bonuses.bonus_5_1_step import BONUS_5_1_STEP
+from .comb7.comb7_utils import Comb7Tools
