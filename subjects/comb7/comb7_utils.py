@@ -44,18 +44,28 @@ class Comb7Tools():
         return f'{rank_list_str}_{flush_str}'
     
     def count_amount_in_deck(comb7_tuple:tuple[list[int], list[int]],deck: Deck) -> int:
-        rank_list, flush_list = comb7_tuple
         
         
         
-        for curr_fl_card in flush_list:
-           rank_list.remove(curr_fl_card) 
+        
+        rank_list =comb7_tuple[0][:]
+        flush_list =comb7_tuple[1][:]
+        
+        rank_list_np = np.array(rank_list)
+        rank_flat, _ = np.unique(rank_list_np, return_counts=True)
+        rank_flat -=2
+        
+        if  flush_list: 
+            for curr_fl_card in flush_list:
+                rank_list.remove(curr_fl_card) 
         
         
         # count flash amount
         flush_am = 0
         flush_list = np.array(flush_list)
         flush_list -=2
+        
+        
         for suit_i in range(4):
             fl_can = True
             for curr_rank in flush_list:

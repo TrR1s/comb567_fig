@@ -208,7 +208,7 @@ def do_comb7_with_fl_list() -> list:
             
             for flushed_am in range(5,8):
                 for comb in combinations(unique_ranks,flushed_am):
-                    comb7_with_fl_list.append((curr_comb_7,list(sorted(comb))))
+                    comb7_with_fl_list.append([curr_comb_7,list(sorted(comb))])
     return comb7_with_fl_list
                 
 if __name__ == "__main__":
@@ -216,6 +216,7 @@ if __name__ == "__main__":
 
 
     comb_7_tuple_list = do_comb7_with_fl_list()
+    comb_7_tuple_list[3][1] = [12,13]
     print(comb_7_tuple_list[:20])
     print(len(comb_7_tuple_list))
     
