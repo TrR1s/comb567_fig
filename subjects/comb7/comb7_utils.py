@@ -1,6 +1,7 @@
 import numpy as np
 import math
 from itertools import combinations
+import copy
 # from subjects.comb7.comb_7_list_wo_suit import do_comb7_with_fl_list
 from subjects.comb5.comb5_simple import Comb5Simple
 from subjects import Deck
@@ -43,57 +44,86 @@ class Comb7Tools():
         
         return f'{rank_list_str}_{flush_str}'
     
-    def count_amount_in_deck(comb7_tuple:tuple[list[int], list[int]],deck: Deck) -> int:
+    def count_amount_in_deck(rank_list:list[int],deck: Deck) -> dict[str,int]:
         
+        def __count_amount(ranks, freq, deck_ranks_amount) -> int:
+            total_amount = 1
+            for i,cur_rank in enumerate(ranks):
+                total_amount *= math.comb(deck_ranks_amount[cur_rank],freq[i])
+            return total_amount     
+        def __check_fl(flush_ranks:list[int],suit_nn: int, suits_0_1:list[list[int]] ) -> bool:
+            fl_is = True
+            for curr_fl_r in flush_ranks:
+                if suits_0_1[suit_nn][curr_fl_r] ==0:
+                    return False
+            return fl_is            
+            
+        def __correct_r_amount_fl(all_ranks:list[int],suit_nn: int, suits_0_1:list[list[int]], rank_amount: list[int] ) -> list[int]:
+            rank_amount_wo_fl_ranks = rank_amount[:]          
+            for curr_r in all_ranks:
+                if suits_0_1[suit_nn][curr_r] ==1:
+                    rank_amount_wo_fl_ranks[curr_r] -=1
+            return rank_amount_wo_fl_ranks 
+    
+        def __do_str_from_correct_lists(ranks:list[int],fl_ranks:list[int]) -> str:
+            ranks_2 = list(map(lambda x: x+2,ranks ))
+            if fl_ranks !=[]:
+                fl_ranks_2 = list(map(lambda x: x+2,fl_ranks))
+            else:
+                fl_ranks_2=[]
+            return Comb7Tools.do_str_key((ranks_2,fl_ranks_2))
         
-        
-        
-        rank_list =comb7_tuple[0][:]
-        flush_list =comb7_tuple[1][:]
-        
+        def __diff_wo_fl(all_ranks:list[int], fl_ranks:list[int]) -> list[int]:
+            if not fl_ranks:
+                return all_ranks[:]
+            all_ranks_copy = all_ranks
+            for curr_rank in fl_ranks:
+                all_ranks_copy.remove(curr_rank)
+            return all_ranks_copy
+                
+                
+                
         rank_list_np = np.array(rank_list)
-        rank_flat, _ = np.unique(rank_list_np, return_counts=True)
-        rank_flat -=2
-        
-        if  flush_list: 
-            for curr_fl_card in flush_list:
-                rank_list.remove(curr_fl_card) 
-        
-        
-        # count flash amount
-        flush_am = 0
-        flush_list = np.array(flush_list)
-        flush_list -=2
+        rank_list_np -= 2
+        ranks, freq = np.unique(rank_list_np, return_counts=True)
+        if ranks.size < 5:
+            amount = __count_amount(ranks,freq,deck.rank_amount)
+            str_key = __do_str_from_correct_lists(rank_list_np,[]) 
+            
+            return {str_key:amount }
         
         
-        for suit_i in range(4):
-            fl_can = True
-            for curr_rank in flush_list:
-                if deck.suits_0_1[suit_i][curr_rank] == 0:
-                    fl_can = False
-                    break
-            if fl_can:
-                flush_am +=1
+        #flush possible
+        res_dist = {}
+        for flushed_size in range(5,ranks.size+1):
+            for cuur_fl_ranks in combinations(ranks,flushed_size):
+                curr_amount= 0
+                for suit_nn in range(4):
+                    if __check_fl(cuur_fl_ranks,suit_nn,deck.suits_0_1):
+                        rank_amount = deck.rank_amount[:]
+                        rank_amount_corrected = __correct_r_amount_fl(ranks,suit_nn,deck.suits_0_1,rank_amount)
+                        diff_list_wo_fl = __diff_wo_fl(list(rank_list_np),list(cuur_fl_ranks))
+                        fl_free_ranks, fl_free_freq = np.unique(np.array(diff_list_wo_fl), return_counts= True)
+                        curr_amount += __count_amount(fl_free_ranks, fl_free_freq,rank_amount_corrected)
+                
+                str_key = __do_str_from_correct_lists(rank_list_np,cuur_fl_ranks) 
+                res_dist[str_key]  =  curr_amount
+                  
                     
-        rank_amount_wo_flset = deck.rank_amount[:]
+                
+                
+        # empty flush []
+        curr_amount= 0
+        for suit_nn in range(4):
+            rank_amount = deck.rank_amount[:]
+            rank_amount_corrected = __correct_r_amount_fl(ranks,suit_nn,deck.suits_0_1,rank_amount)
+            diff_list_wo_fl = __diff_wo_fl(list(rank_list_np),[])
+            fl_free_ranks, fl_free_freq = np.unique(np.array(diff_list_wo_fl), return_counts= True)
+            curr_amount += __count_amount(fl_free_ranks, fl_free_freq,rank_amount_corrected)
         
-        if flush_list.size > 0:
-            if flush_am == 0 : return 0
-        else:
-            flush_am = 1
+        str_key = __do_str_from_correct_lists(rank_list_np,[]) 
+        res_dist[str_key]  =  curr_amount        
+                
+                
+        return res_dist
         
-        for curr_rank in flush_list:
-            rank_amount_wo_flset[curr_rank] -=1
-        
-        
-        rank_list_np = np.array(rank_list)
-        rank, freq = np.unique(rank_list_np, return_counts=True)
-        rank -=2
-        total_amount = 1
-        for i,cur_rank in enumerate(rank):
-            curr_amount = freq[i]
-            
-            total_amount *= math.comb(rank_amount_wo_flset[cur_rank],curr_amount)
-        
-            
-        return total_amount*flush_am
