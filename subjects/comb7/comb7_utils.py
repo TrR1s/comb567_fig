@@ -2,7 +2,7 @@ import numpy as np
 import math
 from itertools import combinations
 import copy
-# from subjects.comb7.comb_7_list_wo_suit import do_comb7_with_fl_list
+from subjects.comb7.comb_7_list_wo_suit import do_comb7_with_fl_list, do_comb_7_tuple_list
 from subjects.comb5.comb5_simple import Comb5Simple
 from subjects import Deck
 
@@ -113,17 +113,18 @@ class Comb7Tools():
                 
                 
         # empty flush []
-        curr_amount= 0
-        for suit_nn in range(4):
-            rank_amount = deck.rank_amount[:]
-            rank_amount_corrected = __correct_r_amount_fl(ranks,suit_nn,deck.suits_0_1,rank_amount)
-            diff_list_wo_fl = __diff_wo_fl(list(rank_list_np),[])
-            fl_free_ranks, fl_free_freq = np.unique(np.array(diff_list_wo_fl), return_counts= True)
-            curr_amount += __count_amount(fl_free_ranks, fl_free_freq,rank_amount_corrected)
-        
+        empty_amount= __count_amount(ranks,freq,deck.rank_amount) - sum(res_dist.values())
+
         str_key = __do_str_from_correct_lists(rank_list_np,[]) 
-        res_dist[str_key]  =  curr_amount        
-                
-                
+        res_dist[str_key]  =  empty_amount        
+                                
         return res_dist
+    
+    def do_comb7_str_list()-> list[str]:
+        comb7_str_list = []
+        combs7 = do_comb7_with_fl_list()
+        for rank_tuple in combs7:
+            comb7_str_list.append(Comb7Tools.do_str_key(rank_tuple))
+        return comb7_str_list
+            
         

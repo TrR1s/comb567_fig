@@ -8,4 +8,4 @@ from .comb_shorts import CombRanks,CombRanksTool
 from .comb5.comb5_short import Comb5short,Comb5shortTools
 from .bonuses.bonus_5_1_step import BONUS_5_1_STEP
 from .comb7.comb7_utils import Comb7Tools
-from .comb7.comb_7_list_wo_suit import do_comb7_with_fl_list
+from .comb7.comb_7_list_wo_suit import do_comb7_with_fl_list,do_comb_7_tuple_list
